@@ -5,10 +5,12 @@ public class PeopleController : MonoBehaviour
 {
     //
 
-    [SerializeField] private GameManager gameManager;
+    [SerializeField] private Rigidbody2D peopleRb;
     [SerializeField] private int peopleScore;
     [SerializeField] private int peopleMoney;
+    private GameManager gameManager;
     private float timeOnScreen = 1.0f;
+    private float peopleSpeed = 5.0f;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -26,16 +28,16 @@ public class PeopleController : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.CompareTag("Sensor") && collision.gameObject.CompareTag("Villager"))
+        Destroy(gameObject);
+
+        if (collision.gameObject.CompareTag("Sensor") && gameObject.CompareTag("Villager"))
         {
-            Destroy(gameObject);
-            // UpdateMoney()
+            // UpdateMoney or Update Score
         }
 
-        if (collision.gameObject.CompareTag("Sensor") && collision.gameObject.CompareTag("Corruptor"))
+        if (collision.gameObject.CompareTag("Sensor") && gameObject.CompareTag("Corruptor"))
         {
-            Destroy(gameObject);
-            // UpdateMoney()
+            // UpdateMoney or Update Score
         }
     }
 
@@ -43,6 +45,6 @@ public class PeopleController : MonoBehaviour
     {
         yield return new WaitForSeconds(timeOnScreen);
 
-        transform.Translate(Vector3.forward);
+        transform.Translate(Vector3.forward * peopleSpeed, Space.World);
     }
 }

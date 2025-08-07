@@ -54,10 +54,8 @@ public class GameManager : MonoBehaviour
 
     private Vector2 RandomSpawnLocation()
     {
-        int locationIndex = Random.Range(0, 3);
-
-        float randomX = minX + (locationIndex * distanceBetweenLoc);
-        float randomY = minY + (locationIndex * distanceBetweenLoc);
+        float randomX = minX + (Random.Range(0, 3) * distanceBetweenLoc);
+        float randomY = minY + (Random.Range(0, 3) * distanceBetweenLoc);
 
         return new Vector2(randomX, randomY);
     }
