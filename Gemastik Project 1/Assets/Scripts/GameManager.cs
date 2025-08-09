@@ -6,6 +6,7 @@ using UnityEngine.SceneManagement;
 public class GameManager : MonoBehaviour
 {
     public bool isGameRunning;
+    public AudioSource corruptorRanAway;
 
     [SerializeField] private Slider moneySlider;
     [SerializeField] private Image moneyImage;
@@ -19,7 +20,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private AudioSource gameWinAudio;
     [SerializeField] private int score;
     [SerializeField] private int currentMoney;
-    private float peopleSpawnRate = 1f;
+    private float peopleSpawnRate = 1.5f;
     private float minX = -1.84f;
     private float minY = -4.26f;
     private float distanceBetweenX = 1.84f;

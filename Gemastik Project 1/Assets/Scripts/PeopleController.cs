@@ -11,12 +11,17 @@ public class PeopleController : MonoBehaviour
     [SerializeField] private int peopleScore;
     [SerializeField] private int peopleMoney;
     private GameManager gameManager;
+    private Vector3 containerPosotion = new Vector3(5, 0, 0);
+    private Vector3 sensorPosition = new Vector3(0, -7, 0);
     private float timeOnScreen = 1.0f;
     private int moneySubstracted = -5000;
-
+    private bool stop;
+    
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        stop = true;
+
         gameManager = GameObject.Find("Game Manager").GetComponent<GameManager>();
 
         StartCoroutine(PeopleDisappearingRoutine());
@@ -25,7 +30,10 @@ public class PeopleController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        if (!stop && transform.position != containerPosotion)
+        {
+            transform.position = sensorPosition;
+        }
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -36,11 +44,17 @@ public class PeopleController : MonoBehaviour
             {
                 if (gameManager.isGameRunning)
                 {
+                    gameManager.corruptorRanAway.PlayOneShot(gameManager.corruptorRanAway.clip, 1f);
                     gameManager.UpdateMoney(moneySubstracted);
                 }
             }
 
-            StartCoroutine(SensorRoutine());
+            StartCoroutine(TriggerRoutine());
+        }
+
+        if (collision.gameObject.CompareTag("Container"))
+        {
+            StartCoroutine(TriggerRoutine());
         }
     }
 
@@ -49,7 +63,7 @@ public class PeopleController : MonoBehaviour
         if (gameManager.isGameRunning)
         {
             peopleAudioSource.PlayOneShot(peopleAudioSource.clip, 1f);
-            transform.position = new Vector2(0, -7);
+            transform.position = containerPosotion;
 
             gameManager.UpdateScore(peopleScore);
             gameManager.UpdateMoney(peopleMoney);
@@ -60,12 +74,12 @@ public class PeopleController : MonoBehaviour
     {
         yield return new WaitForSeconds(timeOnScreen);
 
-        transform.position = new Vector2(0, -7);
+        stop = false;
     }
 
-    IEnumerator SensorRoutine()
+    IEnumerator TriggerRoutine()
     {
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(0.6f);
 
         Destroy(gameObject);
     }
