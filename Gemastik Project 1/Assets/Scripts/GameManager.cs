@@ -1,6 +1,7 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -10,7 +11,11 @@ public class GameManager : MonoBehaviour
     [SerializeField] private Image moneyImage;
     [SerializeField] private GameObject[] people;
     [SerializeField] private GameObject messagePanel;
+    [SerializeField] private GameObject gameOverPanel;
+    [SerializeField] private GameObject gameWinPanel;
     [SerializeField] private AudioSource letUsGoAudio;
+    [SerializeField] private AudioSource gameOverAudio;
+    [SerializeField] private AudioSource gameWinAudio;
     [SerializeField] private int score;
     [SerializeField] private int currentMoney;
     private float peopleSpawnRate = 1.5f;
@@ -20,18 +25,23 @@ public class GameManager : MonoBehaviour
     private float distanceBetweenY = 1.36f;
     private int maxMoney = 100000;
 
+    private void Start()
+    {
+        currentMoney = maxMoney / 2;
+    }
+
     // Update is called once per frame
     void Update()
     {
         ChangeImageColor();
 
-        if (currentMoney <= 0)
+        if (currentMoney <= 0 && isGameRunning)
         {
             GameOver();
             moneySlider.gameObject.SetActive(false);
         }
 
-        if (currentMoney >= maxMoney)
+        if (currentMoney >= maxMoney && isGameRunning)
         {
             GameWin();
             moneySlider.gameObject.SetActive(false);
@@ -46,8 +56,6 @@ public class GameManager : MonoBehaviour
 
         isGameRunning = true;
 
-        currentMoney = maxMoney / 2;
-
         moneySlider.maxValue = maxMoney;
         moneySlider.value = currentMoney;
         moneySlider.gameObject.SetActive(true);
@@ -58,12 +66,16 @@ public class GameManager : MonoBehaviour
 
     public void GameOver()
     {
+        gameOverAudio.PlayOneShot(gameOverAudio.clip, 1f);
         isGameRunning = false;
+        gameOverPanel.gameObject.SetActive(true);
     }
 
     public void GameWin()
     {
+        gameWinAudio.PlayOneShot(gameWinAudio.clip, 1f);
         isGameRunning = false;
+        gameWinPanel.gameObject.SetActive(true);
     }
 
     public void UpdateScore(int scoreToUpdate)
@@ -111,5 +123,19 @@ public class GameManager : MonoBehaviour
         {
             moneyImage.color = Color.green;
         }
+    }
+
+    public void BackToMenuButton()
+    {
+        letUsGoAudio.PlayOneShot(letUsGoAudio.clip, 1f);
+
+        StartCoroutine(AudioSourceRoutine());
+    }
+
+    IEnumerator AudioSourceRoutine()
+    {
+        yield return new WaitForSeconds(0.1f);
+
+        SceneManager.LoadScene("Main Menu");
     }
 }
