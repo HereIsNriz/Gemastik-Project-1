@@ -13,12 +13,13 @@ public class GameManager : MonoBehaviour
     [SerializeField] private GameObject messagePanel;
     [SerializeField] private GameObject gameOverPanel;
     [SerializeField] private GameObject gameWinPanel;
+    [SerializeField] private GameObject pausePanel;
     [SerializeField] private AudioSource letUsGoAudio;
     [SerializeField] private AudioSource gameOverAudio;
     [SerializeField] private AudioSource gameWinAudio;
     [SerializeField] private int score;
     [SerializeField] private int currentMoney;
-    private float peopleSpawnRate = 1.5f;
+    private float peopleSpawnRate = 1f;
     private float minX = -1.84f;
     private float minY = -4.26f;
     private float distanceBetweenX = 1.84f;
@@ -46,6 +47,8 @@ public class GameManager : MonoBehaviour
             GameWin();
             moneySlider.gameObject.SetActive(false);
         }
+
+        PauseGame();
     }
 
     public void LetUsGoButton()
@@ -137,5 +140,27 @@ public class GameManager : MonoBehaviour
         yield return new WaitForSeconds(0.1f);
 
         SceneManager.LoadScene("Main Menu");
+    }
+
+    private void PauseGame()
+    {
+        if (isGameRunning)
+        {
+            if (Input.GetKeyDown(KeyCode.P))
+            {
+                letUsGoAudio.PlayOneShot(letUsGoAudio.clip, 1f);
+                pausePanel.gameObject.SetActive(true);
+
+                Time.timeScale = 0;
+            }
+        }
+    }
+
+    public void ResumeButton()
+    {
+        Time.timeScale = 1;
+
+        pausePanel.gameObject.SetActive(false);
+        letUsGoAudio.PlayOneShot(letUsGoAudio.clip, 1f);
     }
 }

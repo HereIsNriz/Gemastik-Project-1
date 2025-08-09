@@ -7,6 +7,7 @@ TagManager:
   - Corruptor
   - Villager
   - Sensor
+  - Container
   layers:
   - Default
   - TransparentFX

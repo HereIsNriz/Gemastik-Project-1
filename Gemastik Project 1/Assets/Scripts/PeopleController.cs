@@ -30,14 +30,17 @@ public class PeopleController : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        Destroy(gameObject);
-
-        if (collision.gameObject.CompareTag("Sensor") && gameObject.CompareTag("Corruptor"))
+        if (collision.gameObject.CompareTag("Sensor"))
         {
-            if (gameManager.isGameRunning)
+            if (gameObject.CompareTag("Corruptor"))
             {
-                gameManager.UpdateMoney(moneySubstracted);
+                if (gameManager.isGameRunning)
+                {
+                    gameManager.UpdateMoney(moneySubstracted);
+                }
             }
+
+            StartCoroutine(SensorRoutine());
         }
     }
 
@@ -46,7 +49,7 @@ public class PeopleController : MonoBehaviour
         if (gameManager.isGameRunning)
         {
             peopleAudioSource.PlayOneShot(peopleAudioSource.clip, 1f);
-            StartCoroutine(AudioSourceRoutine());
+            transform.position = new Vector2(0, -7);
 
             gameManager.UpdateScore(peopleScore);
             gameManager.UpdateMoney(peopleMoney);
@@ -60,9 +63,9 @@ public class PeopleController : MonoBehaviour
         transform.position = new Vector2(0, -7);
     }
 
-    IEnumerator AudioSourceRoutine()
+    IEnumerator SensorRoutine()
     {
-        yield return new WaitForSeconds(0.3f);
+        yield return new WaitForSeconds(2f);
 
         Destroy(gameObject);
     }
