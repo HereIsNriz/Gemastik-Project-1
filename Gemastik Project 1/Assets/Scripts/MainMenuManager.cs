@@ -44,8 +44,8 @@ public class MainMenuManager : MonoBehaviour
     {
         yield return new WaitForSeconds(0.4f);
 
-        //Application.Quit();
-        UnityEditor.EditorApplication.isPlaying = false;
+        Application.Quit();
+        //UnityEditor.EditorApplication.isPlaying = false;
     }
 }
 
