@@ -13,7 +13,7 @@ public class PeopleController : MonoBehaviour
     private GameManager gameManager;
     private Vector3 containerPosotion = new Vector3(5, 0, 0);
     private Vector3 sensorPosition = new Vector3(0, -7, 0);
-    private float timeOnScreen = 1.0f;
+    private float timeOnScreen = 0.5f;
     private int moneySubstracted = -5000;
     private bool stop;
     

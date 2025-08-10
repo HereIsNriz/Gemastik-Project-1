@@ -26,9 +26,12 @@ public class GameManager : MonoBehaviour
     private float distanceBetweenX = 1.84f;
     private float distanceBetweenY = 1.36f;
     private int maxMoney = 100000;
+    private bool gamePaused;
 
     private void Start()
     {
+        gamePaused = false;
+
         currentMoney = maxMoney / 2;
     }
 
@@ -147,8 +150,10 @@ public class GameManager : MonoBehaviour
     {
         if (isGameRunning)
         {
-            if (Input.GetKeyDown(KeyCode.P))
+            if (Input.GetKeyDown(KeyCode.P) && !gamePaused)
             {
+                gamePaused = true;
+
                 letUsGoAudio.PlayOneShot(letUsGoAudio.clip, 1f);
                 pausePanel.gameObject.SetActive(true);
 
@@ -163,5 +168,7 @@ public class GameManager : MonoBehaviour
 
         pausePanel.gameObject.SetActive(false);
         letUsGoAudio.PlayOneShot(letUsGoAudio.clip, 1f);
+
+        gamePaused = false;
     }
 }
